@@ -35,7 +35,7 @@ module.exports = { envConfig, app }
 
 // Config Server Port
 if (!cluster.isMaster) {
-  app.listen(envConfig.server.port, () => {
+  app.listen(process.env.PORT || 3000, () => {
     console.log(chalk.blue(' [ ✓ ] Running on port : ' + envConfig.server.port))
     app.emit('app_started')
   })
