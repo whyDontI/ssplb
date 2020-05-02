@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
-const envConfig = require('../../server').envConfig
-mongoose.connect(`mongodb://${envConfig.database.localDB.db_host}:27017/${envConfig.database.localDB.db_name}`, {
+
+mongoose.connect('mongodb+srv://nikhil:Khatarnak123@cluster0-hmru0.mongodb.net/parkingLot', {
   useUnifiedTopology: true,
   useNewUrlParser: true
 })

@@ -42,15 +42,23 @@ class ParkingLot {
       let vacantStoreys
       let rowIndex
       let newRow
+
+      // check if vehicle is already parked
+      const checkIfVehicleIsAlreadyParked = await VehicleQuery.__searchVehicle({
+        registrationNumber: req.body.registrationNumber
+      })
+      if (checkIfVehicleIsAlreadyParked) {
+        return __.customMsg(req, res, 200, `This vehicle is already parked at Story ${checkIfVehicleIsAlreadyParked.storyNum} and Row ${checkIfVehicleIsAlreadyParked.rowIndex + 1}`)
+      }
+
+      // Get vacant storeys for vehicle type
       switch (req.body.vehicleType) {
         case 'B': // Bus
-          console.log('Bus', req.body)
           vacantStoreys = await StoryQuery.__getVacantStoreysForBus()
           if (!vacantStoreys[0]) {
-            return __.customMsg(req, res, 404, 'There is no space vacant for your vehicle, Please find some other parking place')      
+            return __.customMsg(req, res, 404, 'There is no space vacant for your vehicle, Please find some other parking place')
           }
           rowIndex = vacantStoreys[0].rows.findIndex((row) => {
-            console.log(row.largeSpots)
             return row.largeSpots === 5
           })
 
@@ -59,11 +67,9 @@ class ParkingLot {
           break
 
         case 'M': // MotorCycle
-          console.log('MotorCycle', req.body)
           vacantStoreys = await StoryQuery.__getVacantStoreysForMotorCycle()
-          
           if (!vacantStoreys[0]) {
-            return __.customMsg(req, res, 404, 'There is no space vacant for your vehicle, Please find some other parking place')      
+            return __.customMsg(req, res, 404, 'There is no space vacant for your vehicle, Please find some other parking place')
           }
 
           rowIndex = vacantStoreys[0].rows.findIndex((row) => {
@@ -81,15 +87,13 @@ class ParkingLot {
           }
 
           break
-        
+
         case 'C': // Car
-          console.log('Car', req.body)
           vacantStoreys = await StoryQuery.__getVacantStoreysForCar()
-          console.log(vacantStoreys)
           if (!vacantStoreys[0]) {
-            return __.customMsg(req, res, 404, 'There is no space vacant for your vehicle, Please find some other parking place')      
+            return __.customMsg(req, res, 404, 'There is no space vacant for your vehicle, Please find some other parking place')
           }
-        
+
           rowIndex = vacantStoreys[0].rows.findIndex((row) => {
             return (row.largeSpots > 1 || row.compactSpots > 1)
           })
@@ -104,12 +108,14 @@ class ParkingLot {
           break
       }
 
+      // Occupy space in row (Decrease the count of vacant spots)
       const occupySpace = await StoryQuery.__occupySpaceInRow({
         storyId: vacantStoreys[0]._id,
         index: rowIndex,
         value: newRow
       })
 
+      // Store the information of parked vehicle
       const parkedVehicle = await VehicleQuery.__parkVehicle({
         storyNum: vacantStoreys[0].storyNum,
         type: req.body.vehicleType,
@@ -120,7 +126,6 @@ class ParkingLot {
 
       return __.successMsg(req, res, 200, parkedVehicle, `Vehicle parked at Story number ${vacantStoreys[0].storyNum} and Row number ${rowIndex + 1}`)
     } catch (error) {
-      console.log(error)
       return __.errorMsg(req, res, 503, 'Service Unavailable.', error)
     }
   }
@@ -128,6 +133,18 @@ class ParkingLot {
   async _getVehicleSlot (req, res) {
     try {
       const vehicles = await VehicleQuery.__getVehicle(req.query)
+      if (!vehicles.length) {
+        return __.customMsg(req, res, 404, 'Vehicles not found')
+      }
+      return __.successMsg(req, res, 200, vehicles, 'Vehicles Returned Successfully!')
+    } catch (error) {
+      return __.errorMsg(req, res, 503, 'Service Unavaiable', error)
+    }
+  }
+
+  async _searchVehicle (req, res) {
+    try {
+      const vehicles = await VehicleQuery.__searchVehicle(req.query)
       if (!vehicles.length) {
         return __.customMsg(req, res, 404, 'Vehicles not found')
       }

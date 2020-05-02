@@ -5,6 +5,7 @@ const parkingLotValidator = require('../middlewares/validators/parkingLot.valida
 
 app.get('/vehicle-count/', parkingLotService._getAllVehicleCount)
 app.get('/vehicle-slot/', parkingLotService._getVehicleSlot)
+app.get('/vehicle-search/', parkingLotService._searchVehicle)
 app.post('/park-vehicle/', parkingLotValidator.parkVehicle, parkingLotService._parkVehicle)
 
 module.exports = app
