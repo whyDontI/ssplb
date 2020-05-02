@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const environment = process.env.NODE_ENV || 'Development'
+const environment = 'Development'
 const cors = require('cors')
 const chalk = require('chalk')
 const cluster = require('cluster')
