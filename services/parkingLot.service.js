@@ -48,7 +48,7 @@ class ParkingLot {
         registrationNumber: req.body.registrationNumber
       })
       if (checkIfVehicleIsAlreadyParked) {
-        return __.customMsg(req, res, 200, `This vehicle is already parked at Story ${checkIfVehicleIsAlreadyParked.storyNum} and Row ${checkIfVehicleIsAlreadyParked.rowIndex + 1}`)
+        return __.customMsg(req, res, 200, `This vehicle is already parked at Story ${checkIfVehicleIsAlreadyParked[0].storyNum} and Row ${checkIfVehicleIsAlreadyParked[0].rowIndex + 1}`)
       }
 
       // Get vacant storeys for vehicle type
