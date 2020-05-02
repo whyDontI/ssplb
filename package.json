@@ -1,0 +1,29 @@
+{
+  "name": "parking-lot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nikhil Bhandarkar | (nikhilbhandarkar1998@gmail.com)",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^17.1.0",
+    "body-parser": "^1.19.0",
+    "bunyan": "^1.8.12",
+    "bunyan-express-serializer": "^1.0.0",
+    "chalk": "^3.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-request-id": "^1.4.1",
+    "helmet": "^3.21.3",
+    "joi": "^14.3.1",
+    "mongoose": "^5.9.3",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "standard": "^14.3.1"
+  }
+}
