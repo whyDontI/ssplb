@@ -47,7 +47,7 @@ class ParkingLot {
       const checkIfVehicleIsAlreadyParked = await VehicleQuery.__searchVehicle({
         registrationNumber: req.body.registrationNumber
       })
-      if (checkIfVehicleIsAlreadyParked) {
+      if (checkIfVehicleIsAlreadyParked.length) {
         return __.customMsg(req, res, 200, `This vehicle is already parked at Story ${checkIfVehicleIsAlreadyParked[0].storyNum} and Row ${checkIfVehicleIsAlreadyParked[0].rowIndex + 1}`)
       }
 
